@@ -77,11 +77,34 @@ axios({
   }
 })
 
-const arr = new Int32Array([21, 31])
+// const arr = new Int32Array([21, 31])
 
-// post buffer 数据
+// // post buffer 数据
+// axios({
+//   method: 'post',
+//   url: '/base/buffer',
+//   data: arr
+// })
+
+// post 的 headers 中设置 content-typ
 axios({
   method: 'post',
-  url: '/base/buffer',
-  data: arr
+  url: '/base/post',
+  headers: {
+    'content-type': 'application/json;'
+  },
+  data: {
+    a: 1,
+    b: 2
+  }
+})
+
+// URLSearchParams 数据
+const paramsString = 'q=URLUtils.searchParams&topic=api'
+const searchParams = new URLSearchParams(paramsString)
+
+axios({
+  method: 'post',
+  url: '/base/post',
+  data: searchParams
 })
