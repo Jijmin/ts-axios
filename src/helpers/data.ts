@@ -10,3 +10,18 @@ export function transformRequest(data: any): any {
   }
   return data
 }
+
+/**
+ * response 转换
+ * @param data 数据
+ */
+export function transformResponse(data: any): any {
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      // do nothing
+    }
+  }
+  return data
+}
