@@ -2,7 +2,16 @@ import { AxiosRequestConfig, AxiosPromise, Method } from '../types'
 import dispatchRequest from './dispatchRequest'
 
 export default class Axios {
-  request(config: AxiosRequestConfig): AxiosPromise {
+  request(url: any, config?: any): AxiosPromise {
+    if (typeof url === 'string') {
+      // 第一个参数如果是字符串，表示传入的是 url 路径，需要添加到 config 中去
+      if (!config) {
+        config = {}
+      }
+      config.url = url
+    } else {
+      config = url // 直接传入配置文件对象的形式，重新赋值下 config
+    }
     return dispatchRequest(config)
   }
 
