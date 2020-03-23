@@ -24,3 +24,15 @@ export function isObject(val: any): val is Object {
 export function isPlainObject(val: any): val is Object {
   return tostring.call(val) === '[object Object]'
 }
+
+/**
+ * 混合，将 from 对象上的属性扩展到 to 对象上，包括原型上的属性
+ * @param to
+ * @param from
+ */
+export function extend<T, U>(to: T, from: U): T & U {
+  for (const key in from) {
+    ;(to as T & U)[key] = from[key] as any
+  }
+  return to as T & U
+}
