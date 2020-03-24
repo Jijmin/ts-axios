@@ -63,3 +63,32 @@ export function buildURL(url: string, params: any) {
 
   return url
 }
+
+interface URLOrigin {
+  protocol: string
+  host: string
+}
+
+/**
+ * 判断同源
+ * @param requestURL 请求url
+ */
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return (
+    parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
+  )
+}
+
+// 同域名的判断主要利用了一个技巧，创建一个 a 标签的 DOM，然后设置 href 属性为我们传入的 url，然后可以获取该 DOM 的 protocol、host
+const urlParsingNode = document.createElement('a')
+const currentOrigin = resolveURL(window.location.href)
+/**
+ * 解析 url 的 protocol 和 host
+ * @param url
+ */
+function resolveURL(url: string): URLOrigin {
+  urlParsingNode.setAttribute('href', url)
+  const { protocol, host } = urlParsingNode
+  return { protocol, host }
+}

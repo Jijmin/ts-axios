@@ -1,6 +1,8 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
+import { isURLSameOrigin } from '../helpers/url'
+import cookie from '../helpers/cookie'
 
 /**
  * 实际发送请求
@@ -16,7 +18,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       responseType,
       timeout,
       cancelToken,
-      withCredentials
+      withCredentials,
+      xsrfCookieName,
+      xsrfHeaderName
     } = config
 
     const request = new XMLHttpRequest()
@@ -67,6 +71,16 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     // 处理超时错误
     request.ontimeout = function handleTimeout() {
       reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
+    }
+
+    // 首先判断如果是配置 withCredentials 为 true 或者是同域请求，我们才会请求 headers 添加 xsrf 相关的字段
+    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+      // 如果判断成功，尝试从 cookie 中读取 xsrf 的 token 值
+      const xsrfValue = cookie.read(xsrfCookieName)
+      if (xsrfValue && xsrfHeaderName) {
+        // 如果能读到，则把它添加到请求 headers 的 xsrf 相关字段中
+        headers[xsrfHeaderName] = xsrfValue
+      }
     }
 
     Object.keys(headers).forEach(name => {
