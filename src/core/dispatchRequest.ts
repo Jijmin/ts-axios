@@ -1,8 +1,8 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import { buildURL } from '../helpers/url'
-import { transformRequest, transformResponse } from '../helpers/data'
-import { processHeaders, flattenHeaders } from '../helpers/headers'
+import { flattenHeaders } from '../helpers/headers'
 import xhr from './xhr'
+import transform from './transform'
 
 /**
  * 发送请求
@@ -19,8 +19,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
  */
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transformUrl(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
+  config.data = transform(config.data, config.headers, config.transformRequest)
   config.headers = flattenHeaders(config.headers, config.method!)
 }
 
@@ -34,23 +33,10 @@ function transformUrl(config: AxiosRequestConfig): string {
 }
 
 /**
- * 转换 request 数据
- * @param config axios配置
+ * 转换响应数据
+ * @param res 响应对象
  */
-function transformRequestData(config: AxiosRequestConfig): any {
-  return transformRequest(config.data)
-}
-
-/**
- * 转换 headers 数据
- * @param config axios配置
- */
-function transformHeaders(config: AxiosRequestConfig) {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
-
 function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformResponse(res.data)
+  res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
 }
