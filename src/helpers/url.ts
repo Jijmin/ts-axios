@@ -99,3 +99,20 @@ function resolveURL(url: string): URLOrigin {
   const { protocol, host } = urlParsingNode
   return { protocol, host }
 }
+
+/**
+ * 是否是一个绝对路径
+ * @param url
+ */
+export function isAbsoluteURL(url: string): boolean {
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+}
+
+/**
+ * 合并URL
+ * @param baseURL 基础URL
+ * @param relativeURL 路径URL
+ */
+export function combineURL(baseURL: string, relativeURL?: string): string {
+  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
+}
