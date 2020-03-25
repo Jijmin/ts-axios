@@ -23,7 +23,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       xsrfCookieName,
       xsrfHeaderName,
       onDownloadProgress,
-      onUploadProgress
+      onUploadProgress,
+      auth
     } = config
 
     const request = new XMLHttpRequest() // 创建一个 request 实例
@@ -110,6 +111,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
      * 处理 headers
      */
     function processHeaders(): void {
+      if (auth) {
+        headers['Authorization'] = 'Basic ' + btoa(auth.username + ':' + auth.password)
+      }
+
       // 如果请求的数据是 FormData 类型，我们应该主动删除请求 headers 中的 Content-Type 字段，让浏览器自动根据请求数据设置 Content-Type
       if (isFormData(data)) {
         delete headers['Content-Type']
