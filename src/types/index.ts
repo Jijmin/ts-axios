@@ -72,6 +72,8 @@ export interface Axios {
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  getUri(config?: AxiosRequestConfig): string // 在不发送请求的前提下根据传入的配置返回一个 url
 }
 
 export interface AxiosInstance extends Axios {
@@ -94,12 +96,21 @@ export interface AxiosTransformer {
   (data: any, headers?: any): any
 }
 
+export interface AxiosClassStatic {
+  new (config: AxiosRequestConfig): Axios
+}
+
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
 
   CancelToken: CancelTokenStatic
   Cancel: CancelStatic
   isCancel: (value: any) => boolean
+
+  // axios.all 就是 Promise.all 的封装，它返回的是一个 Promise 数组，then 函数的参数本应是一个参数为 Promise resolves（数组）的函数，在这里使用了 axios.spread 方法
+  all<T>(promises: Array<T | Promise<T>>): Promise<T[]>
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R // 接收一个函数，返回一个新的函数，新函数的结构满足 then 函数的参数结构
+  Axios: AxiosClassStatic // 通过 axios.Axios 对外暴露了 Axios 类
 }
 
 // 是实例类型的接口定义

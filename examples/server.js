@@ -175,6 +175,13 @@ function registerMoreRouter() {
     res.status(304)
     res.end()
   })
+  router.get('/more/A', function(req, res) {
+    res.end('A')
+  })
+
+  router.get('/more/B', function(req, res) {
+    res.end('B')
+  })
 }
 function registerMore2Router() {
   router.post('/more2/upload', function(req, res) {
