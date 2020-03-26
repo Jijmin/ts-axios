@@ -10,19 +10,27 @@ export function isDate(val: any): val is Date {
 }
 
 /**
- * 是否是一个非 null 的对象
- * @param val 值
- */
-export function isObject(val: any): val is Object {
-  return val !== null && typeof val === 'object'
-}
-
-/**
- * 判断是否是一个纯 object
+ * 判断是否是一个普通对象
  * @param val
  */
 export function isPlainObject(val: any): val is Object {
   return tostring.call(val) === '[object Object]'
+}
+
+/**
+ * 判断是否是表单提交数据
+ * @param val 值
+ */
+export function isFormData(val: any): boolean {
+  return typeof val !== 'undefined' && val instanceof FormData
+}
+
+/**
+ * 判断是否是一个 URLSearchParams 类型
+ * @param val 值
+ */
+export function isURLSearchParams(val: any): val is URLSearchParams {
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
 }
 
 /**
@@ -60,20 +68,4 @@ export function deepMerge(...objs: any[]): any {
   })
 
   return result
-}
-
-/**
- * 判断是否是表单提交数据
- * @param val 值
- */
-export function isFormData(val: any): boolean {
-  return typeof val !== 'undefined' && val instanceof FormData
-}
-
-/**
- * 判断是否是一个 URLSearchParams 类型
- * @param val 值
- */
-export function isURLSearchParams(val: any): val is URLSearchParams {
-  return typeof val !== 'undefined' && val instanceof URLSearchParams
 }
