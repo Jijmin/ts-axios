@@ -47,14 +47,17 @@ export function parseHeaders(headers: string): any {
   }
 
   headers.split('\r\n').forEach(line => {
-    let [key, val] = line.split(':')
+    // 只考虑了第一个 ":" 号，没考虑后半部分的字符串内部也可能有 ":"，按我们现有的逻辑就会把字符串中 ":" 后面部分都截断了
+    // let [key, val] = line.split(':')
+    let [key, ...vals] = line.split(':')
     key = key.trim().toLowerCase()
     if (!key) {
       return
     }
-    if (val) {
-      val = val.trim()
-    }
+    // if (val) {
+    //   val = val.trim()
+    // }
+    let val = vals.join(':').trim()
     parsed[key] = val
   })
   return parsed
