@@ -59,6 +59,7 @@ export default class Axios {
     }
     // 将默认配置和传入进来的 config 进行合并
     config = mergeConfig(this.defaults, config)
+    config.method = config.method.toLowerCase()
 
     // 实现链式：默认取值是我们 dispatchRequest 请求
     const chain: PromiseChain[] = [
