@@ -20,7 +20,7 @@ function encode(val: string): string {
  * @param url 请求地址
  * @param params 参数
  */
-export function buildURL(url: string, params: any, paramsSerializer?: (params: any) => string) {
+export function buildURL(url: string, params?: any, paramsSerializer?: (params: any) => string) {
   if (!params) {
     return url
   }
