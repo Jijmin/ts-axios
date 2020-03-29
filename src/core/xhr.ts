@@ -15,7 +15,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       data = null,
       url,
       method = 'get',
-      headers,
+      headers = {}, // 在拦截器对请求配置做了修改，导致 headers 为空，会报错
       responseType,
       timeout,
       cancelToken,
