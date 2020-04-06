@@ -14,7 +14,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     const {
       data = null,
       url,
-      method = 'get',
+      method,
       headers = {}, // 在拦截器对请求配置做了修改，导致 headers 为空，会报错
       responseType,
       timeout,
@@ -30,7 +30,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     const request = new XMLHttpRequest() // 创建一个 request 实例
 
-    request.open(method.toUpperCase(), url!, true) // 执行 request.open 方法初始化
+    request.open(method!.toUpperCase(), url!, true) // 执行 request.open 方法初始化
 
     configureRequest() // 执行 configureRequest 配置 request 对象
 
